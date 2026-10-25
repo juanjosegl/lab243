@@ -1,0 +1,15 @@
+=== SBOM CycloneDX ===
+2026-10-24T20:11:08-05:00	INFO	"--format cyclonedx" disables security scanning. Specify "--scanners vuln" explicitly if you want to include vulnerabilities in the "cyclonedx" report.
+2026-10-24T20:11:08-05:00	INFO	Detected OS	family="debian" version="12.15"
+2026-10-24T20:11:08-05:00	INFO	Number of language-specific files	num=1
+exit=0
+bomFormat: CycloneDX specVersion: 1.7 componentes: 9
+  - operating-system debian 12.15
+  - application app None
+  - library base-files 12.4+deb12u15
+  - library ca-certificates 20250419~deb12u1
+  - library media-types 10.0.0
+  - library netbase 6.4
+  - library tzdata 2026b-0+deb12u1
+  - library lab243 None
+  - library stdlib v1.27.3

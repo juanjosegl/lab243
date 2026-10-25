@@ -1,0 +1,12 @@
+> docker inspect lab243:1.0.0 --format '{{.Config.User}}'
+nonroot:nonroot
+
+> docker inspect lab243:insegura --format '{{.Config.User}}'   (vacío = corre como root)
+[]
+
+> docker exec lab243-app sh   (se espera fallo: distroless no trae shell)
+OCI runtime exec failed: exec failed: unable to start container process: exec: "sh": executable file not found in $PATH
+exit=127
+
+> docker logs lab243-app
+2026/10/25 01:09:02 Servidor escuchando en puerto 8080

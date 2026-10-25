@@ -1,0 +1,22 @@
+### Prueba del gate con una imagen vulnerable (compilada con Go 1.22)
+
+### A) scripts/pipeline.ps1 corregido (revisa $LASTEXITCODE)
+=== 1. Lint del Dockerfile ===
+=== 2. Build de la imagen ===
+=== 3. Escaneo de vulnerabilidades ===
+==============
+Total: 26 (HIGH: 25, CRITICAL: 1)
+  13 |          throw "Falló '$Nombre' (código $LASTEXITCODE). La imagen no d …
+     | Falló '3. Escaneo de vulnerabilidades' (código 1). La imagen no debe
+Código de salida del script: 1
+
+### B) Script original de la guía, sin cambios
+=== 1. Lint del Dockerfile ===
+=== 2. Build de la imagen ===
+=== 3. Escaneo de vulnerabilidades ===
+==============
+Total: 26 (HIGH: 25, CRITICAL: 1)
+=== 4. Escaneo de secretos ===
+=== 5. Generación de SBOM ===
+=== Pipeline local completado con éxito ===
+Código de salida del script: 0

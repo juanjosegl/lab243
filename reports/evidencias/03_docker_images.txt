@@ -1,0 +1,3 @@
+REPOSITORY:TAG    SIZE      IMAGE ID
+lab243:insegura   1.09GB    3130b6cedf20
+lab243:1.0.0      12.9MB    662a728121e8

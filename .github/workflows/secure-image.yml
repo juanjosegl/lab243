@@ -1,0 +1,93 @@
+name: Secure Image
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  IMAGEN_LOCAL: lab243:1.0.0
+  REPOSITORIO: ghcr.io/${{ github.repository_owner }}/lab243
+  TAG: 1.0.0
+  TRIVY: aquasec/trivy:0.76.1
+  HADOLINT: hadolint/hadolint:v2.12.0
+
+jobs:
+  imagen-segura:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: read
+      packages: write   # publicar en GHCR con el GITHUB_TOKEN
+      id-token: write   # token OIDC para firmar con cosign sin llaves
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: 1. Lint del Dockerfile (hadolint)
+        run: |
+          mkdir -p reports
+          docker run --rm -i "$HADOLINT" hadolint --no-color - < Dockerfile | tee reports/hadolint.txt
+          echo "hadolint: sin hallazgos (código 0)" | tee -a reports/hadolint.txt
+
+      - name: 2. Build de la imagen
+        run: docker build -t "$IMAGEN_LOCAL" .
+
+      - name: 3. Usuario no root
+        run: |
+          usuario=$(docker inspect "$IMAGEN_LOCAL" --format '{{.Config.User}}')
+          echo "Usuario: $usuario" | tee reports/usuario.txt
+          test "$usuario" = "nonroot:nonroot"
+
+      - name: 4. Escaneo de vulnerabilidades (gate HIGH/CRITICAL)
+        run: |
+          trivy() { docker run --rm -v /var/run/docker.sock:/var/run/docker.sock \
+            -v trivy-cache:/root/.cache -v "$PWD:/work" -w /work "$TRIVY" "$@"; }
+          trivy image --severity HIGH,CRITICAL --format json --output reports/trivy-lab243.json "$IMAGEN_LOCAL"
+          trivy image --severity HIGH,CRITICAL --exit-code 1 --format table "$IMAGEN_LOCAL" | tee reports/trivy-lab243.txt
+
+      - name: 5. Escaneo de secretos
+        run: |
+          docker run --rm -v trivy-cache:/root/.cache -v "$PWD:/work" -w /work "$TRIVY" \
+            fs --scanners secret --exit-code 1 --skip-dirs reports . | tee reports/trivy-secretos.txt
+
+      - name: 6. SBOM CycloneDX
+        run: |
+          docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v trivy-cache:/root/.cache \
+            -v "$PWD:/work" -w /work "$TRIVY" image --format cyclonedx --output reports/sbom-lab243.json "$IMAGEN_LOCAL"
+
+      - name: 7. Publicar en GHCR
+        run: |
+          echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u "${{ github.actor }}" --password-stdin
+          docker tag "$IMAGEN_LOCAL" "$REPOSITORIO:$TAG"
+          docker push "$REPOSITORIO:$TAG"
+          digest=$(docker inspect --format='{{index .RepoDigests 0}}' "$REPOSITORIO:$TAG")
+          echo "DIGEST=$digest" >> "$GITHUB_ENV"
+          echo "$digest" | tee reports/digest.txt
+
+      - uses: sigstore/cosign-installer@v4.1.2
+
+      - name: 8. Firmar por digest (keyless)
+        run: cosign sign --yes "$DIGEST" 2>&1 | tee reports/cosign-sign.txt
+
+      - name: 9. Verificar la firma
+        run: |
+          # Identidad y emisor exactos: solo este workflow en main puede haber firmado.
+          identidad="https://github.com/${{ github.repository }}/.github/workflows/secure-image.yml@refs/heads/main"
+          cosign verify "$DIGEST" \
+            --certificate-identity "$identidad" \
+            --certificate-oidc-issuer "https://token.actions.githubusercontent.com" \
+            > reports/cosign-verify.json 2> reports/cosign-verify.txt
+          cat reports/cosign-verify.txt
+          jq '.[0].optional | {Issuer, Subject, githubWorkflowRepository, githubWorkflowRef, githubWorkflowSha}' reports/cosign-verify.json \
+            | tee reports/cosign-verify-resumen.json
+
+      - name: Conservar evidencias
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: evidencias-lab243
+          path: reports/
+          retention-days: 30

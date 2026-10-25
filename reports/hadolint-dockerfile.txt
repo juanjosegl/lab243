@@ -1,0 +1,1 @@
+hadolint: sin hallazgos en Dockerfile (código 0)

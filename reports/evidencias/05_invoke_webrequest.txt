@@ -1,0 +1,4 @@
+> Invoke-WebRequest http://localhost:8081
+StatusCode   : 200
+Content-Type : application/json
+Content      : {"mensaje":"Imagen segura construida en pipeline","version":"1.0.0"}

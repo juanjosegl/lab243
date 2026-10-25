@@ -1,0 +1,112 @@
+=== 1. Lint del Dockerfile ===
+=== 2. Build de la imagen ===
+#0 building with "colima" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 379B done
+#1 DONE 0.0s
+
+#2 resolve image config for docker-image://docker.io/docker/dockerfile:1
+#2 DONE 5.5s
+
+#3 docker-image://docker.io/docker/dockerfile:1@sha256:4edf897a3ffa55b89f906fc8cc78afdb3f1834cc9c7083565e611a8a7d5fe99e
+#3 resolve docker.io/docker/dockerfile:1@sha256:4edf897a3ffa55b89f906fc8cc78afdb3f1834cc9c7083565e611a8a7d5fe99e 0.0s done
+#3 CACHED
+
+#4 [internal] load metadata for gcr.io/distroless/static-debian12:nonroot
+#4 DONE 0.4s
+
+#5 [internal] load metadata for docker.io/library/golang:1.27
+#5 DONE 21.0s
+
+#6 [internal] load .dockerignore
+#6 transferring context: 139B done
+#6 DONE 0.0s
+
+#7 [build 1/6] FROM docker.io/library/golang:1.27@sha256:f20d83a83e18dbd2a4714b8ffd4b30b287b6243962dd75608e86abcc63ba4efc
+#7 resolve docker.io/library/golang:1.27@sha256:f20d83a83e18dbd2a4714b8ffd4b30b287b6243962dd75608e86abcc63ba4efc 0.0s done
+#7 DONE 0.0s
+
+#8 [stage-1 1/3] FROM gcr.io/distroless/static-debian12:nonroot@sha256:afa5c872c891853ca7fcf1f12c3edb23f7eeef36189728842dd51042ff57f7ab
+#8 resolve gcr.io/distroless/static-debian12:nonroot@sha256:afa5c872c891853ca7fcf1f12c3edb23f7eeef36189728842dd51042ff57f7ab 0.0s done
+#8 DONE 0.0s
+
+#9 [internal] load build context
+#9 transferring context: 86B done
+#9 DONE 0.0s
+
+#10 [build 2/6] WORKDIR /src
+#10 CACHED
+
+#11 [build 3/6] COPY go.mod go.sum* ./
+#11 CACHED
+
+#12 [build 4/6] RUN go mod download
+#12 CACHED
+
+#13 [build 5/6] COPY . .
+#13 CACHED
+
+#14 [build 6/6] RUN CGO_ENABLED=0 GOOS=linux go build -trimpath     -ldflags="-s -w" -o /app .
+#14 CACHED
+
+#15 [stage-1 2/3] COPY --from=build /app /app
+#15 CACHED
+
+#16 exporting to image
+#16 exporting layers done
+#16 exporting manifest sha256:91a3fd5875011e23820939e4df3d0e304e8e94fedd4228f54982746f7265d27f done
+#16 exporting config sha256:f447b3f4e8bf73a4374b87e466785820cd309b289d6143d22f3d2bda3f290611 done
+#16 exporting attestation manifest sha256:2608277c67cbfe6b91c74c40960dab9bb48bf41f4b42b8c944f9e30926e4a152 done
+#16 exporting manifest list sha256:742499de85a5e3c39ad11415791cbe565e2d2e62027b924b84a0e013c910cef3 done
+#16 naming to docker.io/library/lab243:1.0.0 done
+#16 unpacking to docker.io/library/lab243:1.0.0 done
+#16 DONE 0.1s
+=== 3. Escaneo de vulnerabilidades ===
+2026-10-24T20:11:37-05:00	INFO	[vuln] Vulnerability scanning is enabled
+2026-10-24T20:11:37-05:00	INFO	[secret] Secret scanning is enabled
+2026-10-24T20:11:37-05:00	INFO	[secret] If your scanning is slow, please try '--scanners vuln' to disable secret scanning
+2026-10-24T20:11:37-05:00	INFO	[secret] Please see https://trivy.dev/docs/v0.76/guide/scanner/secret#recommendation for faster secret detection
+2026-10-24T20:11:37-05:00	INFO	Detected OS	family="debian" version="12.15"
+2026-10-24T20:11:37-05:00	INFO	[debian] Detecting vulnerabilities...	os_version="12" pkg_num=5
+2026-10-24T20:11:37-05:00	INFO	Number of language-specific files	num=1
+2026-10-24T20:11:37-05:00	INFO	[gobinary] Detecting vulnerabilities...
+2026-10-24T20:11:37-05:00	WARN	Using severities from other vendors for some vulnerabilities. Read https://trivy.dev/docs/v0.76/guide/scanner/vulnerability#severity-selection for details.
+
+Report Summary
+
+┌─────────────────────────────┬──────────┬─────────────────┬─────────┐
+│           Target            │   Type   │ Vulnerabilities │ Secrets │
+├─────────────────────────────┼──────────┼─────────────────┼─────────┤
+│ lab243:1.0.0 (debian 12.15) │  debian  │        0        │    -    │
+├─────────────────────────────┼──────────┼─────────────────┼─────────┤
+│ app                         │ gobinary │        0        │    -    │
+└─────────────────────────────┴──────────┴─────────────────┴─────────┘
+Legend:
+- '-': Not scanned
+- '0': Clean (no security findings detected)
+
+=== 4. Escaneo de secretos ===
+2026-10-24T20:11:37-05:00	INFO	[secret] Secret scanning is enabled
+2026-10-24T20:11:37-05:00	INFO	[secret] Please see https://trivy.dev/docs/v0.76/guide/scanner/secret#recommendation for faster secret detection
+2026-10-24T20:11:37-05:00	INFO	Number of language-specific files	num=1
+
+Report Summary
+
+┌────────┬───────┬─────────┐
+│ Target │ Type  │ Secrets │
+├────────┼───────┼─────────┤
+│ go.mod │ gomod │    -    │
+└────────┴───────┴─────────┘
+Legend:
+- '-': Not scanned
+- '0': Clean (no security findings detected)
+
+=== 5. Usuario no root ===
+Usuario: nonroot:nonroot
+=== 6. Generación de SBOM ===
+2026-10-24T20:11:37-05:00	INFO	"--format cyclonedx" disables security scanning. Specify "--scanners vuln" explicitly if you want to include vulnerabilities in the "cyclonedx" report.
+2026-10-24T20:11:37-05:00	INFO	Detected OS	family="debian" version="12.15"
+2026-10-24T20:11:37-05:00	INFO	Number of language-specific files	num=1
+=== Pipeline local completado con éxito ===
+exit=0
