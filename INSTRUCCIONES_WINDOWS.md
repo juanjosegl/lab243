@@ -1,7 +1,7 @@
 # Ejecutar el laboratorio en Windows — Clase 243
 
 **Regenerar las evidencias en Windows 10/11**
-**Grupo:** Juan José Gutiérrez Lasso · María Paula Andrade · Víctor Daniel Fernández · José Fernández · Alejandra Guzmán
+**Integrantes:** Juan José Gutiérrez Lasso · María Paula Andrade · Víctor Daniel Fernández · José Fernández · Alejandra Guzmán
 **Repositorio:** [https://github.com/juanjosegl/lab243](https://github.com/juanjosegl/lab243)
 
 ---
