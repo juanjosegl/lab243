@@ -1,4 +1,4 @@
-# Funciones compartidas por los scripts del laboratorio.
+﻿# Funciones compartidas por los scripts del laboratorio.
 # $ErrorActionPreference = "Stop" no detiene el script cuando un comando externo
 # (docker, trivy, cosign) termina con error: hay que revisar $LASTEXITCODE.
 

@@ -1,4 +1,4 @@
-# Publica la imagen, la firma por digest con cosign (keyless) y verifica la firma.
+﻿# Publica la imagen, la firma por digest con cosign (keyless) y verifica la firma.
 # Requiere: docker login ghcr.io con un token que tenga write:packages.
 param(
     [string]$Imagen = "lab243:1.0.0",

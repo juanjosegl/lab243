@@ -1,4 +1,4 @@
-param([string]$Dockerfile = "Dockerfile")
+﻿param([string]$Dockerfile = "Dockerfile")
 . "$PSScriptRoot\comun.ps1"
 New-Reports
 

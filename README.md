@@ -16,12 +16,16 @@ Servicio Go mínimo empaquetado en una imagen multi-stage sobre distroless, que 
 | `scripts/sbom.ps1` | SBOM CycloneDX |
 | `scripts/sign.ps1` | Publicar, firmar por digest y verificar con cosign |
 | `scripts/pipeline.ps1` | Gate local completo |
+| `scripts/evidencias.ps1` | Regenera todas las evidencias en `reports/evidencias-windows/` |
 | `.github/workflows/secure-image.yml` | Mismo flujo en CI, con publicación y firma keyless |
 | `reports/` | Reportes y evidencias |
 
 ## Uso en Windows (PowerShell)
 
+Paso a paso para regenerar las evidencias en Windows: [INSTRUCCIONES_WINDOWS.md](INSTRUCCIONES_WINDOWS.md).
+
 ```powershell
+powershell -ExecutionPolicy Bypass -File .\scripts\evidencias.ps1
 powershell -ExecutionPolicy Bypass -File .\scripts\pipeline.ps1
 powershell -ExecutionPolicy Bypass -File .\scripts\scan.ps1
 docker run -d --name lab243-app -p 8080:8080 lab243:1.0.0
