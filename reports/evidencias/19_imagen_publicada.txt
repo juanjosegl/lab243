@@ -1,0 +1,5 @@
+> docker pull ghcr.io/juanjosegl/lab243:1.0.0
+> docker inspect ghcr.io/juanjosegl/lab243:1.0.0
+Usuario: nonroot:nonroot
+RepoDigests: [ghcr.io/juanjosegl/lab243@sha256:824d214aee89e4dc344ed5f42c8b5b4576140dbfce2827e6f684baf66bffb7f0]
+Arquitectura: amd64

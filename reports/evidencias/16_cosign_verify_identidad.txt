@@ -1,0 +1,12 @@
+> cosign verify ghcr.io/juanjosegl/lab243@sha256:824d214aee89e4dc344ed5f42c8b5b4576140dbfce2827e6f684baf66bffb7f0 \
+    --certificate-identity "https://github.com/juanjosegl/lab243/.github/workflows/secure-image.yml@refs/heads/main" \
+    --certificate-oidc-issuer "https://token.actions.githubusercontent.com"
+
+Verification for ghcr.io/juanjosegl/lab243@sha256:824d214aee89e4dc344ed5f42c8b5b4576140dbfce2827e6f684baf66bffb7f0 --
+The following checks were performed on each of these signatures:
+  - The cosign claims were validated
+  - Existence of the claims in the transparency log was verified offline
+  - The code-signing certificate was verified using trusted certificate authority certificates
+
+[{"critical":{"identity":{"docker-reference":"ghcr.io/juanjosegl/lab243@sha256:824d214aee89e4dc344ed5f42c8b5b4576140dbfce2827e6f684baf66bffb7f0"},"image":{"docker-manifest-digest":"sha256:824d214aee89e4dc344ed5f42c8b5b4576140dbfce2827e6f684baf66bffb7f0"},"type":"https://sigstore.dev/cosign/sign/v1"},"optional":{}}]
+exit=0
