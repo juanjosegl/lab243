@@ -3,6 +3,9 @@ name: Secure Image
 on:
   push:
     branches: [main]
+    paths-ignore:
+      - "reports/**"
+      - "README.md"
   workflow_dispatch:
 
 permissions:
@@ -80,9 +83,7 @@ jobs:
             --certificate-identity "$identidad" \
             --certificate-oidc-issuer "https://token.actions.githubusercontent.com" \
             > reports/cosign-verify.json 2> reports/cosign-verify.txt
-          cat reports/cosign-verify.txt
-          jq '.[0].optional | {Issuer, Subject, githubWorkflowRepository, githubWorkflowRef, githubWorkflowSha}' reports/cosign-verify.json \
-            | tee reports/cosign-verify-resumen.json
+          cat reports/cosign-verify.txt reports/cosign-verify.json
 
       - name: Conservar evidencias
         if: always()
