@@ -1,3 +1,4 @@
+> docker images lab243
 REPOSITORY:TAG    SIZE      IMAGE ID
+lab243:1.0.0      14.9MB    742499de85a5
 lab243:insegura   1.09GB    3130b6cedf20
-lab243:1.0.0      12.9MB    662a728121e8
